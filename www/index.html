@@ -29,8 +29,17 @@
             
             <h3 class="form-signin-heading text-center"><img src="images/login-page-logo.gif" /></h3>
             
-            <button class="btn btn-lg btn-primary btn-block">Button</button>
-            <button class="btn btn-lg btn-primary btn-block">Button</button>
+            <button class="btn btn-lg btn-default btn-block" onClick="createDB();">Create DB</button>
+            <br />
+            <button class="btn btn-lg btn-info btn-block" class="SurveyButton" data-value="5"><span class="glyphicon glyphicon-thumbs-up"></span> 5</button>
+            <button class="btn btn-lg btn-info btn-block" class="SurveyButton" data-value="4"><span class="glyphicon glyphicon-thumbs-up"></span> 4</button>
+            <button class="btn btn-lg btn-info btn-block" class="SurveyButton" data-value="3"><span class="glyphicon glyphicon-thumbs-up"></span> 3</button>
+            <button class="btn btn-lg btn-info btn-block" class="SurveyButton" data-value="2"><span class="glyphicon glyphicon-thumbs-up"></span> 2</button>
+            <button class="btn btn-lg btn-info btn-block" class="SurveyButton" data-value="1"><span class="glyphicon glyphicon-thumbs-up"></span> 1</button>
+            <br />
+            <div class="table-responsive">
+                <table class="table" id="tableData"></table>
+            </div>
             
         </div> <!-- /container -->
         
@@ -59,6 +68,50 @@
         <script src="includes/js/jquery-1.11.0.min.js" type="text/javascript"></script>
         <script src="includes/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         
+        <script type="text/javascript" charset="utf-8">
+        	
+			//function will be called when an error occurred
+			function errorCB(err){ alert("Error processing SQL: "+err.code); }
+			
+			//add listener when device ready
+			document.addEventListener("deviceready", onDeviceReady, false);
+			//will create database DB_CustSurvey or open it
+			var db = window.openDatabase("DB_CustSurvey", "1.0", "Total IT Dummy DB", 200000);
+		 
+			//function will be called when device ready
+			function onDeviceReady(){ db.transaction(queryDB,errorCB); }
+			//calling data on database
+			function queryDB(tx){
+				tx.executeSql('SELECT * FROM tbl_survey',[],querySuccess,errorCB);
+			}
+		 
+			function querySuccess(tx,result){
+				$('#tableData').empty();
+				$('#tableData').append('<tr><th>ID</th><th>Score</th></tr>');
+				$.each(result.rows,function(index){
+					var row = result.rows.item(index);
+					$('#tableData').append('<tr><th>'+row['id']+'</th><th>'+row['TingkatKepuasan']+'</th></tr>');
+				});
+			}
+			
+			//create database
+			function createDB(){ db.transaction(populateDB, errorCB, successCB); }
+			//create table
+			function populateDB(tx){ tx.executeSql('CREATE TABLE IF NOT EXISTS tbl_survey(id INTEGER PRIMARY KEY AUTOINCREMENT, TingkatKepuasan INTEGER NOT NULL)'); }
+			//function will be called when process succeed
+			function successCB(){ alert("Success creating database!"); }
+			
+			//insert data into database
+			$(".SurveyButton").click(function(){
+				db.transaction(function(tx){ tx.executeSql('INSERT INTO tbl_survey(TingkatKepuasan) VALUES('+$(this).attr("data-value")+')') }, errorCB, successInsert);
+			});
+			//function will be called when process succeed
+			function successInsert(){
+				$('#tableData').append('<tr><th>'+row['id']+'</th><th>'+row['TingkatKepuasan']+'</th></tr>');
+				alert("Success creating database!");
+			}
+			
+        </script>
         
     </body>
 
