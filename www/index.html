@@ -69,15 +69,11 @@
         <script src="includes/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         
         <script type="text/javascript" charset="utf-8">
-        	
-			//function will be called when an error occurred
-			function errorCB(err){ alert("Error processing SQL: "+err.code); }
-			
 			//add listener when device ready
 			document.addEventListener("deviceready", onDeviceReady, false);
 			//will create database DB_CustSurvey or open it
 			var db = window.openDatabase("DB_CustSurvey", "1.0", "Total IT Dummy DB", 200000);
-		 
+		 	
 			//function will be called when device ready
 			function onDeviceReady(){ db.transaction(queryDB,errorCB); }
 			//calling data on database
@@ -93,6 +89,9 @@
 					$('#tableData').append('<tr><th>'+row['id']+'</th><th>'+row['TingkatKepuasan']+'</th></tr>');
 				});
 			}
+			
+			//function will be called when an error occurred
+			function errorCB(err){ alert("Error processing SQL: "+err.code); }
 			
 			//create database
 			function createDB(){ db.transaction(populateDB, errorCB, successCB); }
@@ -110,7 +109,6 @@
 				$('#tableData').append('<tr><th>'+row['id']+'</th><th>'+row['TingkatKepuasan']+'</th></tr>');
 				alert("Success creating database!");
 			}
-			
         </script>
         
     </body>
