@@ -63,11 +63,6 @@
         </div>
         
         <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-        <script type="text/javascript" charset="utf-8" src="includes/js/func-closeApp.js"></script>
-        
-        <script src="includes/js/jquery-1.11.0.min.js" type="text/javascript"></script>
-        <script src="includes/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        
         <script type="text/javascript" charset="utf-8">
 			//add listener when device ready
 			document.addEventListener("deviceready", onDeviceReady, false);
@@ -75,7 +70,10 @@
 			var db = window.openDatabase("DB_CustSurvey", "1.0", "Total IT Dummy DB", 200000);
 		 	
 			//function will be called when device ready
-			function onDeviceReady(){ db.transaction(queryDB,errorCB); }
+			function onDeviceReady(){
+				db.transaction(queryDB,errorCB);
+				document.addEventListener("backbutton", ShowExitDialog, false);
+			}
 			//calling data on database
 			function queryDB(tx){
 				tx.executeSql('SELECT * FROM tbl_survey',[],querySuccess,errorCB);
@@ -110,6 +108,10 @@
 				alert("Success creating database!");
 			}
         </script>
+        <script type="text/javascript" charset="utf-8" src="includes/js/func-closeApp.js"></script>
+        
+        <script src="includes/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+        <script src="includes/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         
     </body>
 
